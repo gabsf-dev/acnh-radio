@@ -1,26 +1,50 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: 'Seurat Pro B';
+  src: url('/fonts/FOT-Seurat_Pro_B.otf') format('opentype');
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  --font-acnh: 'Seurat Pro B', sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  width: 100vw;
+  max-width: 1920px;
+  height: 100dvh;
+  background: url('/background.jpg');
+}
+
+.weather-button[data-isactive='true'] {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  width: 64px;
+  height: 64px;
+}
+
+.progress {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+
+  overflow: hidden;
+  width: 80%;
+  max-width: 500px;
+  height: 40px;
+  background-color: rgba(188, 222, 200, 0.2);
+  border-radius: 16px;
+}
+
+.progress::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  background-color: #bcdec8;
+  width: var(--progress);
+  transition: all 0.5s;
+  border-radius: 16px;
 }

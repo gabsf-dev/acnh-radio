@@ -1,65 +1,86 @@
-import Image from "next/image";
+'use client';
+
+import useAcnhRadio from '@/hooks/useAcnhRadio';
+import Image from 'next/image';
+import { CSSProperties } from 'react';
+import { CloudRain, CloudSnow, Pause, Play, Sun } from 'react-feather';
 
 export default function Home() {
+  const {
+    audioRef,
+    handleAudio,
+    isPlaying,
+    handleChangeWeather,
+    weather,
+    actualHour,
+    nextHour,
+    actualMinute,
+  } = useAcnhRadio();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <div className="w-full h-full flex flex-col gap-20 items-center justify-center bg-black/30 p-4">
+      <h1
+        className="text-2xl md:text-4xl font-medium text-white text-center"
+        aria-label="Animal Crossing: New Horizons Radio"
+      >
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+          src="/acnh-logo.webp"
+          alt="Animal Crossing: New Horizons Radio Logo"
+          width={300}
+          height={100}
+          aria-hidden
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <span aria-hidden>Radio</span>
+      </h1>
+
+      <div className="flex flex-col gap-10">
+        <div className="flex gap-4 justify-center">
+          <button
+            onClick={handleAudio}
+            className="w-12 h-12 flex items-center justify-center rounded-md bg-[#bcdec8] md:hover:bg-[#bcdec8]transition cursor-pointer"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {isPlaying ? <Pause color="white" /> : <Play color="white" />}
+          </button>
         </div>
-      </main>
+
+        <div className="flex gap-4 justify-center items-center">
+          <button
+            onClick={() => handleChangeWeather('sunny')}
+            className="w-12 h-12 flex items-center justify-center rounded-md bg-yellow-600 md:hover:bg-yellow-700 transition cursor-pointer weather-button"
+            data-isactive={weather === 'sunny'}
+          >
+            <Sun color="white" />
+          </button>
+          <button
+            onClick={() => handleChangeWeather('rainy')}
+            className="w-12 h-12 flex items-center justify-center rounded-md bg-blue-600 md:hover:bg-blue-700 transition cursor-pointer weather-button"
+            data-isactive={weather === 'rainy'}
+          >
+            <CloudRain color="white" />
+          </button>
+          <button
+            onClick={() => handleChangeWeather('snowy')}
+            className="w-12 h-12 flex items-center justify-center rounded-md bg-white md:hover:bg-gray-200 transition cursor-pointer weather-button"
+            data-isactive={weather === 'snowy'}
+          >
+            <CloudSnow color="black" />
+          </button>
+        </div>
+      </div>
+
+      <div
+        className="progress"
+        style={
+          {
+            '--progress': `${(actualMinute / 60) * 100}%`,
+          } as CSSProperties
+        }
+      >
+        <p className="text-white font-bold relative z-10">{actualHour}</p>
+        <p className="text-white font-bold relative z-10">{nextHour}</p>
+      </div>
+
+      <audio ref={audioRef} loop />
     </div>
   );
 }
