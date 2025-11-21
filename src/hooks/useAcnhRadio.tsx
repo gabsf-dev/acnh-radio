@@ -57,7 +57,7 @@ export default function useAcnhRadio() {
   };
 
   useEffect(() => {
-    if (audioRef.current) {
+    if (audioRef.current && weather && currentHour) {
       audioRef.current.src = `${songBasePath}/${weather}/${currentHour}.mp3`;
     }
   }, [weather, currentHour]);
